@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NodeServiceAttrTest.Contracts.Repositories;
 using NodeServiceAttrTest.Contracts.Services;
-using NodeServiceAttrTest.Contracts;
 using NodeServiceAttrTest.Models;
 using Microsoft.EntityFrameworkCore;
 

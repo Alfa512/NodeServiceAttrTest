@@ -4,7 +4,6 @@ using System.Linq;
 using NodeServiceAttrTest.Contracts.Repositories;
 using NodeServiceAttrTest.Contracts.Services;
 using Microsoft.EntityFrameworkCore;
-using NodeServiceAttrTest.Models;
 using Attribute = NodeServiceAttrTest.Models.Attribute;
 
 namespace NodeServiceAttrTest.Services
