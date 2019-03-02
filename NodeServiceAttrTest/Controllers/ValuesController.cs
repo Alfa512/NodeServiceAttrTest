@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -95,9 +95,13 @@ namespace NodeServiceAttrTest.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
+            var watch = new Stopwatch();
+            watch.Start();
             var services = _serviceService.GetTargetSet();
             var res = services.ToArray();
-            return JsonConvert.SerializeObject(res);
+            watch.Stop();
+            var el = watch.ElapsedMilliseconds;
+            return $"ResponseTime: {el} ms," + JsonConvert.SerializeObject(res);
         }
 
 
@@ -106,9 +110,13 @@ namespace NodeServiceAttrTest.Controllers
         [HttpGet]
         public ActionResult<string> GetTop(int top = 0)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             var services = _serviceService.GetTargetSet(top);
             var res = services.ToArray();
-            return JsonConvert.SerializeObject(res);
+            watch.Stop();
+            var el = watch.ElapsedMilliseconds;
+            return $"ResponseTime: {el} ms," + JsonConvert.SerializeObject(res);
         }
 
         // GET api/values/slow
@@ -116,7 +124,7 @@ namespace NodeServiceAttrTest.Controllers
         [HttpGet]
         public ActionResult<string> GetSlow()
         {
-            var services = _serviceService.GetVeryNonOptimizedTargetSet();
+            var services = _serviceService.GetNonOptimizedTargetSet();
             var res = services.ToArray();
             return JsonConvert.SerializeObject(res);
         }

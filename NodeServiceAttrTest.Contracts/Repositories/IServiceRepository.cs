@@ -1,4 +1,5 @@
-﻿using NodeServiceAttrTest.Models;
+﻿using System.Linq;
+using NodeServiceAttrTest.Models;
 
 namespace NodeServiceAttrTest.Contracts.Repositories
 {

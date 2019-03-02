@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NodeServiceAttrTest.Contracts.Repositories
 {
-    public interface IRepository<T> where T : class
+    public interface IDapperRepository<T> where T : class
     {
         IQueryable<T> GetAll();
         T Create(T entity);

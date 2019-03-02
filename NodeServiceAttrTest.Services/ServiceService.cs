@@ -12,26 +12,35 @@ namespace NodeServiceAttrTest.Services
     public class ServiceService : IServiceService
     {
         private IServiceRepository _repository;
-        private INodeRepository _nodeRepository;
-        private IAttributeRepository _attributeRepository;
+        private IDapperServiceRepository _dapperServiceRepository;
         private IServiceNodesRepository _serviceNodesRepository;
         private ICustomDataSetRepository _customDataSetRepository;
 
-        public ServiceService(IServiceRepository repository, INodeRepository nodeRepository, IAttributeRepository attributeRepository, IServiceNodesRepository serviceNodesRepository, ICustomDataSetRepository customDataSetRepository)
+        public ServiceService(IServiceRepository repository, IDapperServiceRepository dapperServiceRepository, IServiceNodesRepository serviceNodesRepository, ICustomDataSetRepository customDataSetRepository)
         {
             _repository = repository;
-            _nodeRepository = nodeRepository;
-            _attributeRepository = attributeRepository;
+            _dapperServiceRepository = dapperServiceRepository;
             _serviceNodesRepository = serviceNodesRepository;
             _customDataSetRepository = customDataSetRepository;
         }
 
         public IEnumerable<Service> GetAll()
         {
-            return _repository.GetAll().ToList();
+            return _repository.GetAll();
+        }
+
+        public IEnumerable<Service> GetTop(int top)
+        {
+            return _repository.GetAll().Take(top);
         }
 
         public IEnumerable<Models.ViewModels.Services> GetTargetSet(int max = 0)
+        {
+            var services = max > 0 ? _dapperServiceRepository.GetServicesTop(max).AsEnumerable() : _dapperServiceRepository.GetServices().AsEnumerable();
+            return services;
+        }
+
+        public IEnumerable<Models.ViewModels.Services> GetNonOptimizedTargetSet(int max = 0)
         {
             var top = max > 0 ? $" TOP({max}) " : " ";
             var sql = @"select distinct " + top + @"s.Id as Id, s.Name as Name
@@ -44,31 +53,10 @@ namespace NodeServiceAttrTest.Services
             {
                 Id = r.Id,
                 Name = r.Name,
-                Attributes = target.Select(t => new Attribute { Id = t.AttributeId, Name = t.AttributeName, ServiceId = t.Id }).Where(a => a.ServiceId == r.Id).Distinct(),
-                Nodes = target.Where(t => t.Id == r.Id).Select(n => new Node { Id = n.NodeId, Name = n.NodeName, ParentId = n.ParentId }).Distinct()
+                Attributes = target.Select(t => new Attribute { Id = t.AttributeId, Name = t.AttributeName, ServiceId = t.Id }).Where(a => a.ServiceId == r.Id).Distinct().ToList(),
+                Nodes = target.Where(t => t.Id == r.Id).Select(n => new Node { Id = n.NodeId, Name = n.NodeName, ParentId = n.ParentId }).Distinct().ToList()
             });
-
             return services;
-        }
-
-        public IEnumerable<Models.ViewModels.Services> GetVeryNonOptimizedTargetSet()
-        {
-            var services = _repository.GetAll().ToList();
-
-            var servicenodes = _serviceNodesRepository.GetAll()
-                .Where(r => services.Any(s => s.Id == r.ServiceId)).ToList();
-
-            var nodes = _nodeRepository.GetAll().Where(n => servicenodes.Any(sn => sn.NodeId == n.Id)).ToList();
-            var attrs = _attributeRepository.GetAll().ToList();
-
-            var res = services.Select(r => new Models.ViewModels.Services
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Nodes = nodes.Where(n => servicenodes.Any(sn => sn.NodeId == n.Id && sn.ServiceId == r.Id)),
-                Attributes = attrs.Where(a => a.ServiceId == a.Id)
-            });
-            return res;
         }
 
         public Service GetById(int id)

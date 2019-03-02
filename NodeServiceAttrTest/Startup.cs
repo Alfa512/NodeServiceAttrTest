@@ -10,6 +10,7 @@ using NodeServiceAttrTest.Contracts;
 using NodeServiceAttrTest.Contracts.Repositories;
 using NodeServiceAttrTest.Contracts.Services;
 using NodeServiceAttrTest.Data;
+using NodeServiceAttrTest.Data.DpRepositories;
 using NodeServiceAttrTest.Data.Repositories;
 using NodeServiceAttrTest.Services;
 
@@ -50,7 +51,8 @@ namespace NodeServiceAttrTest
             services.AddTransient<IConfigurationService, ConfigurationService>();
             services.AddTransient<IServiceNodesRepository, ServiceNodesRepository>();
             services.AddTransient<IServiceRepository, ServiceRepository>();
-            services.AddTransient<INodeRepository, NodeRepository>();
+            services.AddTransient<IDapperServiceRepository, DpServiceRepository>();
+            services.AddTransient<INodeRepository, DpNodeRepository>();
             services.AddTransient<IAttributeRepository, AttributeRepository>();
             services.AddTransient<ICustomDataSetRepository, CustomDataSetRepository>();
             services.AddTransient<IDataContext, ApplicationContext>();

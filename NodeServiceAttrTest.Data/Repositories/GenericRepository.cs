@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NodeServiceAttrTest.Contracts;
 using NodeServiceAttrTest.Contracts.Repositories;
 
@@ -22,9 +21,9 @@ namespace NodeServiceAttrTest.Data.Repositories
             return Context.Set<T>();
         }
 
-        public EntityEntry<T> Create(T entity)
+        public T Create(T entity)
         {
-            return Context.Set<T>().Add(entity);
+            return Context.Set<T>().Add(entity).Entity;
         }
 
         public void CreateRange(IEnumerable<T> entities)
@@ -45,9 +44,9 @@ namespace NodeServiceAttrTest.Data.Repositories
             return entity;
         }
 
-        public EntityEntry<T> Delete(T entity)
+        public T Delete(T entity)
         {
-            return Context.Set<T>().Remove(entity);
+            return Context.Set<T>().Remove(entity).Entity;
         }
 
         public void SaveCganges()

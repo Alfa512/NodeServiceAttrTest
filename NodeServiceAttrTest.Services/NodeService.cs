@@ -20,12 +20,12 @@ namespace NodeServiceAttrTest.Services
         public IEnumerable<Node> GetAll()
         {
             return _repository.GetAll().ToList();
+
         }
         public int Count()
         {
             return _repository.GetAll().Count();
         }
-
 
         public Node GetById(int id)
         {

@@ -6,8 +6,9 @@ namespace NodeServiceAttrTest.Contracts.Services
     public interface IServiceService
     {
         IEnumerable<Service> GetAll();
+        IEnumerable<Service> GetTop(int top);
         IEnumerable<Models.ViewModels.Services> GetTargetSet(int max = 0);
-        IEnumerable<Models.ViewModels.Services> GetVeryNonOptimizedTargetSet();
+        IEnumerable<Models.ViewModels.Services> GetNonOptimizedTargetSet(int max = 0);
         Service GetById(int id);
         Service Create(Service item);
         List<Service> CreateRange(List<Service> model);

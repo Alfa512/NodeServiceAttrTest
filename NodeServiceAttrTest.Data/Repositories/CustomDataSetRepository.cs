@@ -9,10 +9,8 @@ namespace NodeServiceAttrTest.Data.Repositories
 {
     public class CustomDataSetRepository : GenericRepository<CustomDataSet>, ICustomDataSetRepository
     {
-        public IDataContext CustomContext { get; }
         public CustomDataSetRepository(IDataContext context) : base(context)
         {
-            CustomContext = context;
         }
 
         public IQueryable<CustomDataSet> FromSql(string sql)

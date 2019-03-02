@@ -7,7 +7,7 @@ namespace NodeServiceAttrTest.Models.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<Node> Nodes { get; set; }
-        public IEnumerable<Attribute> Attributes { get; set; }
+        public List<Node> Nodes { get; set; }
+        public List<Attribute> Attributes { get; set; }
     }
 }
