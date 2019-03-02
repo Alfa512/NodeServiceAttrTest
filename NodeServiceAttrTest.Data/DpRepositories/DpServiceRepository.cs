@@ -46,10 +46,12 @@ namespace NodeServiceAttrTest.Data.DpRepositories
                 Mapping();
                 var services = db.Query<Services, Node, Attribute, Services>(sql, map: (s, n, a) =>
                         {
-                            s.Attributes = s.Attributes ?? new List<Attribute>();
+                            /*s.Attributes = s.Attributes ?? new List<Attribute>();
                             s.Nodes = s.Nodes ?? new List<Node>();
                             s.Attributes.Add(a);
-                            s.Nodes.Add(n);
+                            s.Nodes.Add(n);*/
+                            s.Node = n;
+                            s.Attribute = a;
                             return s;
                         },
                         splitOn: "NodeId,AttributeId"
@@ -57,8 +59,8 @@ namespace NodeServiceAttrTest.Data.DpRepositories
                     .Select(group =>
                     {
                         var combinedService = group.First();
-                        combinedService.Nodes = group.Select(service => service.Nodes.FirstOrDefault()).GroupBy(node => node?.Id).Select(ng => ng?.FirstOrDefault()).ToList();
-                        combinedService.Attributes = group.Select(service => service.Attributes.FirstOrDefault()).GroupBy(at => at?.Id).Select(ag => ag?.FirstOrDefault()).ToList();
+                        combinedService.Nodes = group.Select(service => service.Node).GroupBy(node => node.Id).Select(ng => ng.FirstOrDefault()).ToList();
+                        combinedService.Attributes = group.Select(service => service.Attribute).GroupBy(at => at.Id).Select(ag => ag.FirstOrDefault()).ToList();
                         return combinedService;
                     }).AsQueryable();
                 return services;
